@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Git Workflow Cheat Sheet</title>
+<style>
+  :root{
+    --bg:#0f172a;         /* slate-900 */
+    --card:#111827;       /* gray-900 */
+    --text:#e5e7eb;       /* gray-200 */
+    --muted:#94a3b8;      /* slate-400 */
+    --accent:#38bdf8;     /* sky-400 */
+    --accent2:#a78bfa;    /* violet-400 */
+    --code-bg:#0b1220;
+    --border:#1f2937;     /* gray-800 */
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    background: linear-gradient(180deg, var(--bg), #0b1022);
+    color: var(--text);
+    line-height:1.6;
+    padding: 24px;
+  }
+  .container{
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  header{
+    text-align:center;
+    margin-bottom: 24px;
+  }
+  h1{
+    font-size: 2.1rem;
+    margin:0 0 8px 0;
+    color: var(--accent);
+  }
+  .subtitle{
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .card{
+    background: linear-gradient(180deg, var(--card), #0b1220);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    margin:16px 0;
+    box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  }
+  h2{
+    font-size: 1.25rem;
+    color: var(--accent2);
+    margin: 0 0 12px 0;
+  }
+  p{margin:8px 0;color:var(--text)}
+  ul{margin:8px 0 8px 22px}
+  code,kbd,pre{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    background: var(--code-bg);
+    color: #e6edf3;
+    border:1px solid var(--border);
+    border-radius:10px;
+  }
+  pre{
+    padding:14px;
+    overflow:auto;
+    line-height:1.5;
+  }
+  .two-col{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap:16px;
+  }
+  .tip{
+    border-left:4px solid var(--accent);
+    padding-left:12px;
+    color: var(--muted);
+    margin:10px 0 0;
+  }
+  .footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.9rem;
+    margin-top:20px;
+  }
+  .badge{
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:#0b1220;
+    color:var(--muted);
+    font-size:12px;
+    margin-left:6px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Git Workflow Cheat Sheet <span class="badge">Windows + Ubuntu VM</span></h1>
+      <div class="subtitle">Fast commands for working across two machines (push from one, pull on the other).</div>
+    </header>
+
+    <section class="card">
+      <h2>Daily Workflow (Two Machines)</h2>
+      <pre><code># Before you start (on any machine)
+git pull
+
+# After you finish edits
+git add .
+git commit -m "Describe what you changed"
+git push</code></pre>
+      <p class="tip">Tip: Always <code>git pull</code> before editing to avoid conflicts.</p>
+    </section>
+
+    <section class="card two-col">
+      <div>
+        <h2>Commit &amp; Push a Single File</h2>
+        <pre><code>git add path/to/file.ext
+git commit -m "Update file.ext"
+git push</code></pre>
+      </div>
+      <div>
+        <h2>First-Time Setup (Per Machine)</h2>
+        <pre><code>git config --global user.name  "FerasMorsi"
+git config --global user.email "feras-m@hotmail.com"</code></pre>
+      </div>
+    </section>
+
+    <section class="card two-col">
+      <div>
+        <h2>Connect Local Folder to GitHub (One-Time)</h2>
+        <pre><code>git remote add origin https://github.com/FerasMorsi/REPO_NAME.git
+git branch -M main
+git push -u origin main</code></pre>
+      </div>
+      <div>
+        <h2>Clone on Another Laptop</h2>
+        <pre><code>git clone https://github.com/FerasMorsi/REPO_NAME.git
+cd REPO_NAME
+git pull</code></pre>
+      </div>
+    </section>
+
+    <section class="card two-col">
+      <div>
+        <h2>Status &amp; History</h2>
+        <pre><code>git status
+git log --oneline --graph --decorate --all</code></pre>
+      </div>
+      <div>
+        <h2>Branch Basics (Optional)</h2>
+        <pre><code>git switch -c feature/my-change     # create &amp; switch
+git switch main                     # go back to main
+git merge feature/my-change         # merge into current branch
+git push -u origin feature/my-change</code></pre>
+      </div>
+    </section>
+
+    <section class="card two-col">
+      <div>
+        <h2>Undo / Restore (Safe)</h2>
+        <pre><code>git restore path/to/file.ext        # discard local file changes
+git reset                           # unstage (keep changes)</code></pre>
+      </div>
+      <div>
+        <h2>Pull Problems (Quick Fixes)</h2>
+        <pre><code>git pull --rebase
+# If you really want local to win (destructive):
+git push -u origin main -f</code></pre>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>SSH (No Password Prompts)</h2>
+      <pre><code>ssh-keygen -t ed25519 -C "feras-m@hotmail.com"
+# Press Enter for defaults
+cat ~/.ssh/id_ed25519.pub   # copy to GitHub → Settings → SSH and GPG keys</code></pre>
+      <pre><code># After adding the key, switch your remote to SSH:
+git remote set-url origin git@github.com:FerasMorsi/REPO_NAME.git</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>One-Command “Quick Sync” Alias (Optional)</h2>
+      <p>Add this once to your shell to run <code>git sync "msg"</code>:</p>
+      <pre><code>git config --global alias.sync '!f(){ git pull &amp;&amp; git add . &amp;&amp; git commit -m "${1:-update}" &amp;&amp; git push; }; f'</code></pre>
+      <pre><code># Usage:
+git sync "update docs and fixes"</code></pre>
+    </section>
+
+    <div class="footer">Happy coding, Feras! 🚀</div>
+  </div>
+</body>
+</html>
